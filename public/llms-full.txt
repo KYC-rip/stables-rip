@@ -1,0 +1,151 @@
+# stables.rip — Complete Reference
+
+> On-chain stablecoin censorship tracker. Real-time monitoring of every USDC and USDT freeze event across Ethereum and TRON blockchains.
+
+## Overview
+
+stables.rip provides real-time transparency into stablecoin censorship. Stablecoin issuers like Circle (USDC) and Tether (USDT) maintain blacklist functions in their smart contracts that can permanently freeze tokens at any address. stables.rip monitors these on-chain events and presents them in an accessible format.
+
+## How Stablecoin Freezing Works
+
+### USDC (Circle)
+Circle's USDC smart contract includes a `blacklist(address)` function callable only by Circle's designated blacklister address. When called:
+- All USDC transfers to and from the blacklisted address revert
+- The tokens remain at the address but are completely non-transferable
+- No DeFi protocol, DEX, or bridge can circumvent the freeze
+- There is no public appeals process
+
+### USDT (Tether)
+Tether's USDT contract includes two key functions:
+- `addBlackList(address)` — freezes the address, preventing all transfers
+- `destroyBlackFunds(address)` — can destroy (burn) tokens at a blacklisted address
+
+On TRON, USDT uses the same `AddedBlackList` mechanism via the contract at TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t.
+
+### Technical Mechanism
+Stablecoin contracts implement a `notBlacklisted` modifier on `transfer()` and `transferFrom()` functions. This modifier checks a mapping of blacklisted addresses before allowing any transfer. If either sender or receiver is blacklisted, the transaction reverts.
+
+Implications:
+- You cannot send frozen tokens to any address
+- No one can send tokens to a frozen address
+- DeFi protocols cannot interact with frozen tokens
+- Tokens cannot be approved for third-party spending
+- The freeze is enforced at the protocol level
+
+## Data Collection Methodology
+
+### Ethereum Monitoring
+- USDT freeze events: Topic 0x42e160154868087d6bfdc0ca23d96a1c1cfa32f1b72ba9ba27b69b98a0d819dc on contract 0xdAC17F958D2ee523a2206206994597C13D831ec7
+- USDC freeze events: Topic 0xffa4e6181777692565cf28528fc88fd1516ea86b56da075235fa575af6a4b855 on contract 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+- Events fetched via Etherscan log API
+- Balances verified via Multicall3 (0xcA11bde05977b3631167028862bE2a173976CA11) batch queries
+
+### TRON Monitoring
+- USDT AddedBlackList events from TronGrid API
+- Contract: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
+- Balances fetched per-account via TronGrid v1 API
+- TRON hex addresses converted to Base58 format
+
+### Update Frequency
+- Automated sync every 30 minutes via cron
+- Both Ethereum and TRON scanned in each cycle
+- Balance snapshots taken at sync time
+
+## Database Schema
+
+Each blacklist record contains:
+- address: The blacklisted wallet address (ETH hex or TRON Base58)
+- asset: USDT or USDC
+- chain: ETH or TRON
+- tx_hash: Transaction hash of the freeze event
+- banned_at: Timestamp when the address was blacklisted
+- frozen_balance: USD value of tokens at the address at time of last sync
+- is_active: Whether the address is currently blacklisted (1) or has been removed (0)
+
+## Frequently Asked Questions
+
+### What is stablecoin freezing?
+Stablecoin issuers like Circle (USDC) and Tether (USDT) have built-in blacklist functions in their smart contracts. When an address is blacklisted, the tokens at that address become permanently non-transferable.
+
+### Who can freeze stablecoin wallets?
+Only the issuing company can execute a freeze. Circle manages USDC blacklisting, and Tether manages USDT blacklisting. These freezes are typically initiated in response to law enforcement requests, OFAC sanctions compliance, or internal risk assessments.
+
+### Can USDC freeze my funds?
+Yes. If you hold USDC in any self-custody wallet, Circle can blacklist your address at any time. This applies to Ethereum, TRON, and all other chains where USDC is deployed.
+
+### Can USDT freeze my funds?
+Yes. Tether has blacklisted hundreds of addresses across Ethereum and TRON. Once blacklisted, the USDT at that address is permanently frozen.
+
+### Is freezing the same as confiscation?
+Freezing prevents the address owner from moving the tokens, but the tokens are not destroyed or transferred. They remain at the frozen address indefinitely. Tether has an additional destroyBlackFunds function that can burn frozen tokens.
+
+### Can frozen stablecoins be unfrozen?
+Technically yes — the contracts have unblacklist/removeBlackList functions. In practice, unfreezes are extremely rare.
+
+### What does "blacklisted" vs "frozen" mean?
+They refer to the same thing. "Blacklisted" is the technical term in the smart contract. "Frozen" describes the practical effect. Some blacklisted addresses show $0 balance because tokens were moved before the freeze or drained through other mechanisms.
+
+### Which chains are monitored?
+Currently Ethereum (ETH) and TRON for both USDT and USDC freeze events.
+
+### How often is data updated?
+Every 30 minutes via automated cron jobs.
+
+### How can I protect myself from stablecoin freezing?
+The only way to fully avoid freeze risk is to not hold freezable stablecoins. Privacy-preserving cryptocurrencies like Monero (XMR) have no blacklist function, no central issuer, and no freeze capability.
+
+## API Reference
+
+Base URL: https://api.kyc.rip/v1/tools
+
+### GET /ban-list
+Paginated list of blacklisted addresses with aggregate statistics.
+
+Parameters:
+- limit (int, default 50): Number of records to return
+- offset (int, default 0): Pagination offset
+- address (string, optional): Filter by address (partial match)
+- asset (string, optional): Filter by asset (USDT or USDC)
+- chain (string, optional): Filter by chain (ETH or TRON)
+
+Returns: { ok, data: BanRecord[], stats: BanStats, meta: { limit, offset } }
+
+### GET /ban-list/top
+Top frozen wallets sorted by frozen balance descending.
+
+Parameters:
+- limit (int, default 30, max 100): Number of records
+
+Returns: { ok, data: BanRecord[] }
+
+### GET /ban-list/latest
+Most recent freeze events.
+
+Parameters:
+- limit (int, default 15, max 50): Number of records
+
+Returns: { ok, data: BanRecord[] }
+
+### GET /ban-list/monthly
+Monthly aggregated freeze activity.
+
+Returns: { ok, data: [{ month, count, volume }] }
+
+### GET /ban-list/chart
+Daily cumulative frozen supply time series.
+
+Returns: { ok, data: [{ time, value, daily, count }] }
+
+## About the Project
+
+stables.rip is an independent transparency project. Part of the rip.family ecosystem:
+
+- kyc.rip (https://kyc.rip) — No-KYC cryptocurrency exchange aggregator. Best rates from 10+ providers, 700+ coins.
+- xmrprice.live (https://xmrprice.live) — Real-time Monero (XMR) price tracker with street price spreads.
+- ripley.run (https://ripley.run) — Monero desktop wallet, AI payment gateway, and toolkit.
+- xmr402.org (https://xmr402.org) — XMR paywall middleware for monetizing APIs with Monero payments.
+- stables.rip (https://stables.rip) — On-chain stablecoin censorship tracker.
+
+Built by @XBToshi. No affiliation with Circle, Tether, or any stablecoin issuer. All data sourced from public blockchain records.
+
+Contact: @kyc_rip on Twitter, @XBToshi on Twitter.

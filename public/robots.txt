@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://stables.rip/sitemap.xml
+
+# AI/LLM Context
+# See https://llmstxt.org
+# llms.txt: concise site summary for AI assistants
+# llms-full.txt: comprehensive reference with API docs, methodology, FAQ

@@ -1,0 +1,53 @@
+{
+  "name": "stables.rip",
+  "description": "On-chain stablecoin censorship tracker. Real-time monitoring of USDC and USDT freeze events across Ethereum and TRON.",
+  "url": "https://stables.rip",
+  "api": {
+    "type": "rest",
+    "base_url": "https://api.kyc.rip/v1/tools",
+    "endpoints": [
+      {
+        "path": "/ban-list",
+        "method": "GET",
+        "description": "Paginated list of blacklisted stablecoin addresses with aggregate statistics",
+        "parameters": {
+          "limit": { "type": "integer", "default": 50, "description": "Number of records to return" },
+          "offset": { "type": "integer", "default": 0, "description": "Pagination offset" },
+          "address": { "type": "string", "description": "Filter by wallet address (partial match)" },
+          "asset": { "type": "string", "enum": ["USDT", "USDC"], "description": "Filter by stablecoin" },
+          "chain": { "type": "string", "enum": ["ETH", "TRON"], "description": "Filter by blockchain" }
+        }
+      },
+      {
+        "path": "/ban-list/top",
+        "method": "GET",
+        "description": "Top frozen wallets sorted by frozen balance descending",
+        "parameters": {
+          "limit": { "type": "integer", "default": 30, "max": 100 }
+        }
+      },
+      {
+        "path": "/ban-list/latest",
+        "method": "GET",
+        "description": "Most recent stablecoin freeze events",
+        "parameters": {
+          "limit": { "type": "integer", "default": 15, "max": 50 }
+        }
+      },
+      {
+        "path": "/ban-list/monthly",
+        "method": "GET",
+        "description": "Monthly aggregated freeze activity (count and USD volume per month)"
+      },
+      {
+        "path": "/ban-list/chart",
+        "method": "GET",
+        "description": "Daily cumulative frozen supply time series for charting"
+      }
+    ]
+  },
+  "contact": {
+    "twitter": "@kyc_rip",
+    "website": "https://kyc.rip"
+  }
+}

@@ -1,0 +1,74 @@
+# stables.rip
+
+> On-chain stablecoin censorship tracker. Real-time monitoring of USDC and USDT freeze events across Ethereum and TRON.
+
+## What is stables.rip?
+
+stables.rip is a transparency tool that tracks every stablecoin blacklist event on-chain. When Circle (USDC) or Tether (USDT) freezes a wallet address, we detect and record it automatically.
+
+## Data Sources
+
+- Ethereum: USDC and USDT freeze events from Etherscan log API
+- TRON: USDT AddedBlackList events from TronGrid API
+- Balances verified via on-chain multicall queries
+- Synced every 30 minutes
+
+## Key Facts
+
+- Tracks USDC and USDT freezes on Ethereum and TRON
+- Thousands of addresses blacklisted across both chains
+- Over $1 billion in total frozen value
+- Data available since 2020
+- Free, open, no signup required
+
+## Features
+
+- Wallet Checker: Check if any Ethereum or TRON address is blacklisted
+- Freeze Feed: Real-time stream of the latest freeze events
+- Cumulative Chart: Frozen supply over time
+- Top Frozen Wallets: Largest frozen balances ranked
+- Monthly Statistics: Freeze activity trends by month
+- Per-chain and per-asset breakdowns
+
+## API
+
+Public JSON API at https://api.kyc.rip/v1/tools/ban-list
+
+Endpoints:
+- GET /v1/tools/ban-list?limit=50&offset=0 — Paginated blacklist with stats
+- GET /v1/tools/ban-list?address={addr} — Check specific address
+- GET /v1/tools/ban-list/top?limit=30 — Top frozen wallets by balance
+- GET /v1/tools/ban-list/latest?limit=15 — Most recent freeze events
+- GET /v1/tools/ban-list/monthly — Monthly aggregated freeze activity
+- GET /v1/tools/ban-list/chart — Daily cumulative frozen supply time series
+
+## Pages
+
+- / — Main tracker with hero stats, wallet checker, freeze feed, chart, top wallets
+- /stats — Detailed statistics: monthly trends, per-chain, per-asset breakdowns
+- /blacklist — Educational content: how USDC and USDT freezing works technically
+- /faq — 14 frequently asked questions about stablecoin censorship
+
+## How Stablecoin Freezing Works
+
+Stablecoin issuers (Circle for USDC, Tether for USDT) have privileged functions in their smart contracts:
+- USDC: blacklist(address) — prevents all transfers to/from the address
+- USDT: addBlackList(address) — freezes the address; destroyBlackFunds(address) — can also burn the tokens
+
+Once blacklisted, tokens at that address are permanently non-transferable. There is no public appeals process.
+
+## About
+
+stables.rip is part of the rip.family ecosystem:
+- kyc.rip — No-KYC cryptocurrency exchange aggregator
+- xmrprice.live — Real-time Monero price tracker
+- ripley.run — Monero desktop wallet and AI payment gateway
+- walls.rip — Anonymous comms toolkit (Ghost Mail, Dead Drop, SMS Wall, PGP Chat)
+- xmr402.org — XMR paywall middleware for APIs
+
+Built by @XBToshi. No affiliation with Circle or Tether. All data sourced from public blockchain records.
+
+## Contact
+
+- Twitter: @kyc_rip, @XBToshi
+- Website: https://kyc.rip
