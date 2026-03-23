@@ -9,7 +9,7 @@ import es from './locales/es/common.json'
 import pt from './locales/pt/common.json'
 import ja from './locales/ja/common.json'
 
-export const SUPPORTED_LANGS = ['en', 'zh-TW', 'ru', 'es', 'pt', 'ja'] as const
+export const SUPPORTED_LANGS = ['en', 'zh-TW', 'zh', 'ru', 'es', 'pt', 'ja'] as const
 export type SupportedLang = (typeof SUPPORTED_LANGS)[number]
 
 const pathDetector = {
@@ -37,6 +37,7 @@ i18n
     resources: {
       en: { common: en },
       'zh-TW': { common: zhTW },
+      zh: { common: zhTW },
       ru: { common: ru },
       es: { common: es },
       pt: { common: pt },
