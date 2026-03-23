@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useBanData } from '../hooks/useBanData';
 import { SEO } from '../components/SEO';
 import { Header } from '../components/Header';
@@ -11,6 +12,7 @@ import { TopFrozenWallets } from '../components/TopFrozenWallets';
 import { QuickFacts } from '../components/QuickFacts';
 
 export default function HomePage() {
+  const { t } = useTranslation();
   const {
     stats, loading, error,
     searchResults, searching, searchAddress, clearSearch,
@@ -23,7 +25,7 @@ export default function HomePage() {
         <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <p className="text-sr-danger text-sm mb-2">Failed to load data</p>
+            <p className="text-sr-danger text-sm mb-2">{t('home_error.failed_to_load')}</p>
             <p className="text-sr-dim text-xs">{error}</p>
           </div>
         </div>

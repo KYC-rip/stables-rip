@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Badge } from './ui/Badge';
 import { AddressDisplay } from './ui/AddressDisplay';
 import type { BanRecord } from '../types';
@@ -7,25 +8,30 @@ interface LatestFreezesProps {
   loading: boolean;
 }
 
-function relativeTime(dateStr: string) {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}d ago`;
-  const months = Math.floor(days / 30);
-  return `${months}mo ago`;
+function useRelativeTime() {
+  return (dateStr: string) => {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 60) return `${mins}m`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days}d`;
+    const months = Math.floor(days / 30);
+    return `${months}mo`;
+  };
 }
 
 export function LatestFreezes({ records, loading }: LatestFreezesProps) {
+  const { t } = useTranslation();
+  const relativeTime = useRelativeTime();
+
   if (loading) {
     return (
       <section>
-        <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">Latest Freeze Events</h2>
+        <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">{t('latest_freezes.title')}</h2>
         <div className="text-center text-[10px] text-sr-dim animate-pulse uppercase tracking-widest font-bold py-8">
-          Loading events...
+          {t('latest_freezes.loading')}
         </div>
       </section>
     );
@@ -34,9 +40,9 @@ export function LatestFreezes({ records, loading }: LatestFreezesProps) {
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider">Latest Freeze Events</h2>
+        <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider">{t('latest_freezes.title')}</h2>
         <span className="text-[9px] text-sr-dim">
-          Showing {records.length} most recent
+          {t('latest_freezes.showing', { count: records.length })}
         </span>
       </div>
 

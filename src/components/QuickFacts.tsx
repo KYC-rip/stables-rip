@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { BanStats, BanRecord } from '../types';
 
 interface QuickFactsProps {
@@ -6,6 +7,8 @@ interface QuickFactsProps {
 }
 
 export function QuickFacts({ stats, topWallets }: QuickFactsProps) {
+  const { t } = useTranslation();
+
   if (!stats) return null;
 
   // Largest single freeze = first in topWallets (already sorted by balance DESC)
@@ -24,38 +27,38 @@ export function QuickFacts({ stats, topWallets }: QuickFactsProps) {
 
   const facts = [
     {
-      label: 'Tracking Since',
-      value: stats.earliest_date ? new Date(stats.earliest_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '—',
+      label: t('quick_facts.tracking_since'),
+      value: stats.earliest_date ? new Date(stats.earliest_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '\u2014',
     },
     {
-      label: 'Total $ Frozen',
+      label: t('quick_facts.total_frozen'),
       value: stats.total_frozen >= 1e9
         ? `$${(stats.total_frozen / 1e9).toFixed(2)}B`
         : `$${(stats.total_frozen / 1e6).toFixed(0)}M`,
     },
     {
-      label: 'Addresses Blacklisted',
+      label: t('quick_facts.addresses_blacklisted'),
       value: stats.total_records.toLocaleString(),
     },
     {
-      label: 'Largest Single Freeze',
+      label: t('quick_facts.largest_single_freeze'),
       value: largestFreeze >= 1e6
         ? `$${(largestFreeze / 1e6).toFixed(1)}M`
         : `$${largestFreeze.toLocaleString(undefined, { maximumFractionDigits: 0 })}`,
     },
     {
-      label: 'Most Targeted Chain',
-      value: topChain ? `${topChain[0]} (${topChain[1]})` : '—',
+      label: t('quick_facts.most_targeted_chain'),
+      value: topChain ? `${topChain[0]} (${topChain[1]})` : '\u2014',
     },
     {
-      label: 'Most Targeted Asset',
-      value: topAsset ? `${topAsset[0]} (${topAsset[1]})` : '—',
+      label: t('quick_facts.most_targeted_asset'),
+      value: topAsset ? `${topAsset[0]} (${topAsset[1]})` : '\u2014',
     },
   ];
 
   return (
     <section>
-      <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">Quick Facts</h2>
+      <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">{t('quick_facts.title')}</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {facts.map((f) => (
           <div key={f.label} className="border border-sr-border rounded-sm p-4 bg-sr-surface">

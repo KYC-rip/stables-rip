@@ -1,5 +1,6 @@
 import { useState, FormEvent } from 'react';
 import { Search, ShieldCheck, ShieldAlert, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Badge } from './ui/Badge';
 import { AddressDisplay } from './ui/AddressDisplay';
 import type { BanRecord } from '../types';
@@ -12,6 +13,7 @@ interface WalletCheckerProps {
 }
 
 export function WalletChecker({ onSearch, onClear, results, searching }: WalletCheckerProps) {
+  const { t } = useTranslation();
   const [input, setInput] = useState('');
 
   const handleSubmit = (e: FormEvent) => {
@@ -30,9 +32,9 @@ export function WalletChecker({ onSearch, onClear, results, searching }: WalletC
   return (
     <section className="w-full">
       <div className="border border-sr-border rounded-sm p-6 md:p-8 bg-sr-surface">
-        <h2 className="font-display text-lg font-bold mb-1">Is this wallet blacklisted?</h2>
+        <h2 className="font-display text-lg font-bold mb-1">{t('wallet_checker.title')}</h2>
         <p className="text-[11px] text-sr-dim mb-6">
-          Check any Ethereum or TRON address against the full USDC and USDT blacklist instantly.
+          {t('wallet_checker.subtitle')}
         </p>
 
         <form onSubmit={handleSubmit} className="relative">
@@ -40,7 +42,7 @@ export function WalletChecker({ onSearch, onClear, results, searching }: WalletC
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Paste an Ethereum or TRON address..."
+            placeholder={t('wallet_checker.placeholder')}
             className="w-full bg-sr-base border border-sr-border p-4 pl-11 pr-10 text-xs placeholder:text-sr-dim/30 focus:outline-none focus:border-sr-danger transition-colors rounded-sm"
           />
           <Search className="absolute left-4 top-4 text-sr-dim" size={16} />
@@ -54,7 +56,7 @@ export function WalletChecker({ onSearch, onClear, results, searching }: WalletC
         {/* Results */}
         {searching && (
           <div className="mt-4 text-center text-[10px] text-sr-dim animate-pulse uppercase tracking-widest font-bold py-4">
-            Scanning ledger...
+            {t('wallet_checker.scanning')}
           </div>
         )}
 
@@ -65,7 +67,9 @@ export function WalletChecker({ onSearch, onClear, results, searching }: WalletC
                 <div className="flex items-center gap-2">
                   <ShieldAlert size={16} className="text-sr-danger" />
                   <span className="text-xs font-bold text-sr-danger uppercase tracking-wider">
-                    {results.length} frozen record{results.length > 1 ? 's' : ''} found
+                    {results.length > 1
+                      ? t('wallet_checker.frozen_records_found_plural', { count: results.length })
+                      : t('wallet_checker.frozen_records_found', { count: results.length })}
                   </span>
                 </div>
                 {results.map((r) => (
@@ -79,7 +83,7 @@ export function WalletChecker({ onSearch, onClear, results, searching }: WalletC
                       <span className={`text-sm font-bold ${parseFloat(r.frozen_balance || '0') > 0 ? 'text-sr-danger' : 'text-sr-dim'}`}>
                         {parseFloat(r.frozen_balance || '0') > 0
                           ? `$${parseFloat(r.frozen_balance!).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
-                          : 'Drained'}
+                          : t('wallet_checker.drained')}
                       </span>
                       <span className="text-[9px] text-sr-dim">{new Date(r.banned_at).toLocaleDateString()}</span>
                     </div>
@@ -90,8 +94,8 @@ export function WalletChecker({ onSearch, onClear, results, searching }: WalletC
               <div className="border border-sr-green/30 rounded-sm bg-sr-green/5 p-4 flex items-center gap-3">
                 <ShieldCheck size={18} className="text-sr-green" />
                 <div>
-                  <span className="text-xs font-bold text-sr-green uppercase tracking-wider">No freeze detected</span>
-                  <p className="text-[10px] text-sr-dim mt-0.5">This address is not on the USDC or USDT blacklist.</p>
+                  <span className="text-xs font-bold text-sr-green uppercase tracking-wider">{t('wallet_checker.no_freeze_detected')}</span>
+                  <p className="text-[10px] text-sr-dim mt-0.5">{t('wallet_checker.no_freeze_description')}</p>
                 </div>
               </div>
             )}

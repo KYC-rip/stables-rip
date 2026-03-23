@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { SEO } from '../components/SEO';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
@@ -5,6 +6,7 @@ import { FrozenSupplyChart } from '../components/FrozenSupplyChart';
 import { useBanData } from '../hooks/useBanData';
 
 export default function StatsPage() {
+  const { t } = useTranslation();
   const { stats, loading, chartData, monthlyData } = useBanData();
 
   // Per-chain from breakdown
@@ -47,8 +49,8 @@ export default function StatsPage() {
   return (
     <div className="flex flex-col items-center min-h-screen font-mono antialiased text-current">
       <SEO
-        title="Statistics — stables.rip"
-        description="Stablecoin freeze statistics: monthly trends, per-chain breakdown, and cumulative frozen supply over time."
+        title={t('stats_page.seo_title')}
+        description={t('stats_page.seo_description')}
         path="/stats"
       />
       <div className="scanlines" />
@@ -58,30 +60,30 @@ export default function StatsPage() {
       <main className="w-full max-w-6xl px-4 md:px-6 pb-12 space-y-12 relative z-10">
         <div className="mt-4">
           <h1 className="font-display text-2xl md:text-3xl font-black mb-2">
-            Freeze Statistics
+            {t('stats_page.title')}
           </h1>
           <p className="text-xs text-sr-dim max-w-lg leading-relaxed">
-            Breakdown of stablecoin censorship activity across chains, assets, and time.
+            {t('stats_page.subtitle')}
           </p>
         </div>
 
         {/* Summary row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="border border-sr-border rounded-sm p-4 bg-sr-surface">
-            <span className="text-[9px] text-sr-dim uppercase tracking-wider font-medium block mb-1">Total Frozen</span>
+            <span className="text-[9px] text-sr-dim uppercase tracking-wider font-medium block mb-1">{t('stats_page.total_frozen')}</span>
             <span className="font-display text-lg font-bold text-sr-danger">{loading ? '...' : fmtUsd(stats?.total_frozen || 0)}</span>
           </div>
           <div className="border border-sr-border rounded-sm p-4 bg-sr-surface">
-            <span className="text-[9px] text-sr-dim uppercase tracking-wider font-medium block mb-1">Addresses</span>
+            <span className="text-[9px] text-sr-dim uppercase tracking-wider font-medium block mb-1">{t('stats_page.addresses')}</span>
             <span className="font-display text-lg font-bold">{loading ? '...' : (stats?.total_records || 0).toLocaleString()}</span>
           </div>
           <div className="border border-sr-border rounded-sm p-4 bg-sr-surface">
-            <span className="text-[9px] text-sr-dim uppercase tracking-wider font-medium block mb-1">Chains Monitored</span>
-            <span className="font-display text-lg font-bold">{chainStats.length || '—'}</span>
+            <span className="text-[9px] text-sr-dim uppercase tracking-wider font-medium block mb-1">{t('stats_page.chains_monitored')}</span>
+            <span className="font-display text-lg font-bold">{chainStats.length || '\u2014'}</span>
           </div>
           <div className="border border-sr-border rounded-sm p-4 bg-sr-surface">
-            <span className="text-[9px] text-sr-dim uppercase tracking-wider font-medium block mb-1">Assets Tracked</span>
-            <span className="font-display text-lg font-bold">{assetStats.length || '—'}</span>
+            <span className="text-[9px] text-sr-dim uppercase tracking-wider font-medium block mb-1">{t('stats_page.assets_tracked')}</span>
+            <span className="font-display text-lg font-bold">{assetStats.length || '\u2014'}</span>
           </div>
         </div>
 
@@ -90,7 +92,7 @@ export default function StatsPage() {
 
         {/* Per-asset breakdown */}
         <section>
-          <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">By Asset</h2>
+          <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">{t('stats_page.by_asset')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {assetStats.map(([asset, data]) => (
               <div key={asset} className="border border-sr-border rounded-sm p-5 bg-sr-surface">
@@ -100,11 +102,11 @@ export default function StatsPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <span className="text-[9px] text-sr-dim uppercase block mb-0.5">Volume Frozen</span>
+                    <span className="text-[9px] text-sr-dim uppercase block mb-0.5">{t('stats_page.volume_frozen')}</span>
                     <span className="text-sm font-bold">{fmtUsd(data.volume)}</span>
                   </div>
                   <div>
-                    <span className="text-[9px] text-sr-dim uppercase block mb-0.5">Addresses</span>
+                    <span className="text-[9px] text-sr-dim uppercase block mb-0.5">{t('stats_page.addresses')}</span>
                     <span className="text-sm font-bold">{data.count.toLocaleString()}</span>
                   </div>
                 </div>
@@ -115,7 +117,7 @@ export default function StatsPage() {
 
         {/* Per-chain breakdown */}
         <section>
-          <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">By Chain</h2>
+          <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">{t('stats_page.by_chain')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {chainStats.map(([chain, data]) => (
               <div key={chain} className="border border-sr-border rounded-sm p-5 bg-sr-surface">
@@ -124,11 +126,11 @@ export default function StatsPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <span className="text-[9px] text-sr-dim uppercase block mb-0.5">Volume Frozen</span>
+                    <span className="text-[9px] text-sr-dim uppercase block mb-0.5">{t('stats_page.volume_frozen')}</span>
                     <span className="text-sm font-bold">{fmtUsd(data.volume)}</span>
                   </div>
                   <div>
-                    <span className="text-[9px] text-sr-dim uppercase block mb-0.5">Addresses</span>
+                    <span className="text-[9px] text-sr-dim uppercase block mb-0.5">{t('stats_page.addresses')}</span>
                     <span className="text-sm font-bold">{data.count.toLocaleString()}</span>
                   </div>
                 </div>
@@ -139,12 +141,12 @@ export default function StatsPage() {
 
         {/* Monthly breakdown */}
         <section>
-          <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">Monthly Freeze Activity</h2>
+          <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">{t('stats_page.monthly_activity')}</h2>
           <div className="border border-sr-border rounded-sm overflow-hidden">
             <div className="grid grid-cols-[6rem_1fr_6rem] gap-2 px-4 py-2 bg-sr-base text-[9px] text-sr-dim uppercase font-bold tracking-wider border-b border-sr-border">
-              <span>Month</span>
-              <span>Addresses Frozen</span>
-              <span className="text-right">Volume</span>
+              <span>{t('stats_page.col_month')}</span>
+              <span>{t('stats_page.col_addresses_frozen')}</span>
+              <span className="text-right">{t('stats_page.col_volume')}</span>
             </div>
             {monthlyData.map((d) => (
               <div
@@ -164,7 +166,7 @@ export default function StatsPage() {
             ))}
             {monthlyData.length === 0 && (
               <div className="px-4 py-8 text-center text-sr-dim text-xs">
-                {loading ? 'Loading...' : 'No data yet'}
+                {loading ? t('stats_page.loading') : t('stats_page.no_data')}
               </div>
             )}
           </div>

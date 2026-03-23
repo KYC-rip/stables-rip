@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { createChart, ColorType, AreaSeries } from 'lightweight-charts';
 import type { IChartApi, ISeriesApi, AreaSeriesPartialOptions } from 'lightweight-charts';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 
 interface FrozenSupplyChartProps {
@@ -9,6 +10,7 @@ interface FrozenSupplyChartProps {
 }
 
 export function FrozenSupplyChart({ data, loading }: FrozenSupplyChartProps) {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<'Area'> | null>(null);
@@ -82,9 +84,9 @@ export function FrozenSupplyChart({ data, loading }: FrozenSupplyChartProps) {
   if (loading || data.length === 0) {
     return (
       <section>
-        <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">Frozen Supply Over Time</h2>
+        <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider mb-4">{t('frozen_supply_chart.title')}</h2>
         <div className="border border-sr-border rounded-sm bg-sr-surface h-[300px] flex items-center justify-center text-[10px] text-sr-dim animate-pulse uppercase tracking-widest font-bold">
-          {loading ? 'Loading chart...' : 'No data available'}
+          {loading ? t('frozen_supply_chart.loading') : t('frozen_supply_chart.no_data')}
         </div>
       </section>
     );
@@ -93,9 +95,9 @@ export function FrozenSupplyChart({ data, loading }: FrozenSupplyChartProps) {
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider">Frozen Supply Over Time</h2>
+        <h2 className="text-sm font-bold text-sr-dim uppercase tracking-wider">{t('frozen_supply_chart.title')}</h2>
         <span className="text-[9px] text-sr-dim">
-          Cumulative USD value frozen across all stablecoins. Data from Etherscan/TronGrid.
+          {t('frozen_supply_chart.description')}
         </span>
       </div>
       <div className="border border-sr-border rounded-sm bg-sr-surface overflow-hidden">
