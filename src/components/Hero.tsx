@@ -58,49 +58,52 @@ export function Hero({ stats, loading, assetTotals }: HeroProps) {
         {t('hero.subtitle')}
       </p>
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl mt-10">
-        {/* USDC */}
-        <div className="border border-blue-500/20 rounded-sm p-6 bg-sr-surface relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
-          <span className="text-[9px] text-blue-400 font-bold tracking-[0.2em] uppercase">{t('hero.usdc_frozen')}</span>
-          <div className="text-2xl md:text-3xl font-extrabold mt-2 text-blue-400">
+      {/* Stats container — on mobile: total first, cards second; on desktop: cards first, total second */}
+      <div className="flex flex-col mt-10 w-full max-w-2xl">
+        {/* Total + Meta — order-first on mobile, order-last on desktop */}
+        <div className="order-first md:order-last mt-0 md:mt-8 mb-8 md:mb-0 flex flex-col items-center gap-3">
+          <div className="text-4xl md:text-6xl font-black text-sr-danger drop-shadow-[0_0_20px_rgba(239,68,68,0.2)] dark:drop-shadow-[0_0_20px_rgba(239,68,68,0.3)]">
             {loading ? '...' : (
-              <Counter value={assetTotals.usdc.frozen} formatter={fmtUsd} />
+              <>$<Counter value={total} formatter={(v) => v.toLocaleString(undefined, { maximumFractionDigits: 0 })} /></>
             )}
           </div>
-          <div className="flex items-center justify-between mt-3 text-[9px] text-sr-dim font-medium">
-            <span>{t('hero.wallets_blacklisted', { count: assetTotals.usdc.count })}</span>
-            <span className="text-blue-400/60">{assetTotals.usdc.count > 0 && assetTotals.usdc.frozen === 0 ? t('hero.balances_drained') : ''}</span>
-          </div>
+          <span className="text-[10px] text-sr-danger/60 font-bold tracking-[0.4em] uppercase">
+            {t('hero.total_value_frozen')}
+          </span>
         </div>
 
-        {/* USDT */}
-        <div className="border border-emerald-500/20 rounded-sm p-6 bg-sr-surface relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
-          <span className="text-[9px] text-emerald-400 font-bold tracking-[0.2em] uppercase">{t('hero.usdt_frozen')}</span>
-          <div className="text-2xl md:text-3xl font-extrabold mt-2 text-emerald-400">
-            {loading ? '...' : (
-              <Counter value={assetTotals.usdt.frozen} formatter={fmtUsd} />
-            )}
+        {/* Stat Cards */}
+        <div className="order-last md:order-first grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* USDC */}
+          <div className="border border-blue-500/20 rounded-sm p-6 bg-sr-surface relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+            <span className="text-[9px] text-blue-400 font-bold tracking-[0.2em] uppercase">{t('hero.usdc_frozen')}</span>
+            <div className="text-2xl md:text-3xl font-extrabold mt-2 text-blue-400">
+              {loading ? '...' : (
+                <Counter value={assetTotals.usdc.frozen} formatter={fmtUsd} />
+              )}
+            </div>
+            <div className="flex items-center justify-between mt-3 text-[9px] text-sr-dim font-medium">
+              <span>{t('hero.wallets_blacklisted', { count: assetTotals.usdc.count })}</span>
+              <span className="text-blue-400/60">{assetTotals.usdc.count > 0 && assetTotals.usdc.frozen === 0 ? t('hero.balances_drained') : ''}</span>
+            </div>
           </div>
-          <div className="flex items-center justify-between mt-3 text-[9px] text-sr-dim font-medium">
-            <span>{t('hero.wallets_blacklisted', { count: assetTotals.usdt.count })}</span>
-            <span>{t('hero.eth_tron')}</span>
-          </div>
-        </div>
-      </div>
 
-      {/* Total + Meta */}
-      <div className="mt-8 flex flex-col items-center gap-3">
-        <div className="text-4xl md:text-6xl font-black text-sr-danger drop-shadow-[0_0_20px_rgba(239,68,68,0.2)] dark:drop-shadow-[0_0_20px_rgba(239,68,68,0.3)]">
-          {loading ? '...' : (
-            <>$<Counter value={total} formatter={(v) => v.toLocaleString(undefined, { maximumFractionDigits: 0 })} /></>
-          )}
+          {/* USDT */}
+          <div className="border border-emerald-500/20 rounded-sm p-6 bg-sr-surface relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
+            <span className="text-[9px] text-emerald-400 font-bold tracking-[0.2em] uppercase">{t('hero.usdt_frozen')}</span>
+            <div className="text-2xl md:text-3xl font-extrabold mt-2 text-emerald-400">
+              {loading ? '...' : (
+                <Counter value={assetTotals.usdt.frozen} formatter={fmtUsd} />
+              )}
+            </div>
+            <div className="flex items-center justify-between mt-3 text-[9px] text-sr-dim font-medium">
+              <span>{t('hero.wallets_blacklisted', { count: assetTotals.usdt.count })}</span>
+              <span>{t('hero.eth_tron')}</span>
+            </div>
+          </div>
         </div>
-        <span className="text-[10px] text-sr-danger/60 font-bold tracking-[0.4em] uppercase">
-          {t('hero.total_value_frozen')}
-        </span>
       </div>
 
       {/* Sync meta */}
