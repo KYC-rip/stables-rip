@@ -1,6 +1,7 @@
 import { Activity } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Counter } from './ui/Counter';
+import { LiveFreezePulse } from './LiveFreezePulse';
 import type { BanStats } from '../types';
 
 interface HeroProps {
@@ -57,6 +58,9 @@ export function Hero({ stats, loading, assetTotals }: HeroProps) {
       <p className="text-xs text-sr-dim max-w-md mt-3 leading-relaxed">
         {t('hero.subtitle')}
       </p>
+
+      {/* Live freeze pulse — surfaces the last 1h wave when ≥ $1M */}
+      <LiveFreezePulse />
 
       {/* Stats container — on mobile: total first, cards second; on desktop: cards first, total second */}
       <div className="flex flex-col mt-10 w-full max-w-2xl">
