@@ -1,9 +1,15 @@
 import { useState, FormEvent } from 'react';
-import { Search, ShieldCheck, ShieldAlert, X } from 'lucide-react';
+import { Search, ShieldCheck, ShieldAlert, X, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Badge } from './ui/Badge';
 import { AddressDisplay } from './ui/AddressDisplay';
 import type { BanRecord } from '../types';
+
+// Link to the freeze tx itself (not the wallet) — Etherscan /tx/ or Tronscan #/transaction/
+function txExplorerUrl(chain: string, txHash: string): string {
+  if (chain === 'TRON') return `https://tronscan.org/#/transaction/${txHash}`;
+  return `https://etherscan.io/tx/${txHash}`;
+}
 
 interface WalletCheckerProps {
   onSearch: (addr: string) => void;
@@ -86,6 +92,17 @@ export function WalletChecker({ onSearch, onClear, results, searching }: WalletC
                           : t('wallet_checker.drained')}
                       </span>
                       <span className="text-[9px] text-sr-dim">{new Date(r.banned_at).toLocaleDateString()}</span>
+                      {r.tx_hash && (
+                        <a
+                          href={txExplorerUrl(r.chain, r.tx_hash)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-[10px] text-sr-info hover:text-sr-info/80 transition-colors border border-sr-border rounded-sm px-1.5 py-0.5"
+                          title={`Freeze transaction · ${r.tx_hash}`}
+                        >
+                          tx <ExternalLink size={9} />
+                        </a>
+                      )}
                     </div>
                   </div>
                 ))}
