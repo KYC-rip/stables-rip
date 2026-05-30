@@ -52,6 +52,18 @@ export function Footer() {
               <li><Link to={`${prefix}/faq`} className="hover:text-sr-danger transition-colors">FAQ</Link></li>
               <li><Link to={`${prefix}/blacklist`} className="hover:text-sr-danger transition-colors">{t('footer.how_freezing_works')}</Link></li>
               <li><a href="https://kyc.rip/graveyard" target="_blank" rel="noreferrer" className="hover:text-sr-danger transition-colors">Graveyard (KYC.RIP)</a></li>
+              <li>
+                <a
+                  href="https://kyc.rip/donate"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-sr-danger transition-colors inline-flex items-center gap-1"
+                  title="Support stables.rip + the kyc.rip ecosystem"
+                >
+                  {t('footer.donate', { defaultValue: 'Donate (XMR / BTC)' })}
+                  <ExternalLink size={10} />
+                </a>
+              </li>
             </ul>
           </div>
 

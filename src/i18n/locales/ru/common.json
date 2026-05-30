@@ -182,7 +182,8 @@
     "connect": "Связь",
     "project_suffix": "проект",
     "disclaimer": "Все данные из публичных записей блокчейна. Не связаны с Circle или Tether.",
-    "check_address": "Проверить адрес"
+    "check_address": "Проверить адрес",
+    "donate": "Пожертвовать (XMR / BTC)"
   },
   "home_error": {
     "failed_to_load": "Не удалось загрузить данные"

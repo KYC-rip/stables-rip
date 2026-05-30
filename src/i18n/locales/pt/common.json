@@ -182,7 +182,8 @@
     "connect": "Conectar",
     "project_suffix": "projeto",
     "disclaimer": "Todos os dados são obtidos de registros públicos de blockchain. Sem afiliação com Circle ou Tether.",
-    "check_address": "Verificar endereço"
+    "check_address": "Verificar endereço",
+    "donate": "Doar (XMR / BTC)"
   },
   "home_error": {
     "failed_to_load": "Falha ao carregar dados"

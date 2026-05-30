@@ -176,6 +176,38 @@ function ResultRow({ r }: { r: BanRecord }) {
   );
 }
 
+// Affiliate cross-sell: when a freeze is detected, surface a contextual
+// CTA pointing the user at kyc.rip/swap with the right pair prefilled.
+// Captures moment-of-need (frozen address → wants to exit to XMR / BTC).
+// The /go redirect could be added later for click tracking; for now it
+// goes direct to the swap with pair + amount pre-filled.
+function ExitCta({ asset, chain, balance }: { asset: 'USDT' | 'USDC'; chain: string; balance: number }) {
+  const network = chain === 'TRON' ? 'TRC20' : 'ERC20';
+  const amount = balance > 0 ? Math.min(Math.floor(balance), 100000) : 1000;
+  const swapUrl = `https://kyc.rip/swap?from=${asset.toLowerCase()}&from_network=${network}&to=xmr&to_network=Mainnet&amount=${amount}`;
+  return (
+    <div className="border border-sr-info/30 rounded-sm bg-sr-info/5 p-4 space-y-2">
+      <div className="text-xs font-bold text-sr-info uppercase tracking-wider">
+        Exit strategy
+      </div>
+      <p className="text-[11px] text-sr-dim">
+        A frozen address means you can't move the {asset} from it directly. For{' '}
+        <strong className="text-sr-info">future</strong> {asset} you receive, the privacy-respecting
+        exit is to swap into native XMR (or BTC) immediately on arrival — that way nothing sits in
+        a freezable wallet long enough to get caught.
+      </p>
+      <a
+        href={swapUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sr-info/10 hover:bg-sr-info/20 border border-sr-info/30 text-sr-info text-[11px] uppercase tracking-wider font-bold transition-colors rounded-sm"
+      >
+        Swap {asset} → XMR on kyc.rip <ExternalLink size={11} />
+      </a>
+    </div>
+  );
+}
+
 function NoFreezeResult({ query }: { query: string }) {
   return (
     <div className="border border-sr-green/30 rounded-sm bg-sr-green/5 p-4 space-y-3">
@@ -316,6 +348,12 @@ export default function CheckAddress() {
                 {results.map((r) => (
                   <ResultRow key={`${r.id}-${r.chain}`} r={r} />
                 ))}
+                {/* Affiliate cross-sell — only on first matching result */}
+                <ExitCta
+                  asset={results[0].asset}
+                  chain={results[0].chain}
+                  balance={parseFloat(results[0].frozen_balance || '0')}
+                />
               </>
             )}
           </div>

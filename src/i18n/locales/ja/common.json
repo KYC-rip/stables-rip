@@ -182,7 +182,8 @@
     "connect": "つながる",
     "project_suffix": "プロジェクト",
     "disclaimer": "すべてのデータは公開ブロックチェーン記録から取得。Circle または Tether との提携はありません。",
-    "check_address": "アドレス確認"
+    "check_address": "アドレス確認",
+    "donate": "寄付 (XMR / BTC)"
   },
   "home_error": {
     "failed_to_load": "データの読み込みに失敗しました"
