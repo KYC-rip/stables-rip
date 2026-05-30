@@ -39,6 +39,7 @@ export function Footer() {
             <h4 className="text-[10px] text-sr-dim uppercase tracking-wider font-bold mb-3">{t('footer.tools')}</h4>
             <ul className="space-y-2 text-[12px]">
               <li><Link to={`${prefix}/`} className="hover:text-sr-danger transition-colors">{t('footer.freeze_tracker')}</Link></li>
+              <li><Link to={`${prefix}/check`} className="hover:text-sr-danger transition-colors">{t('footer.check_address', { defaultValue: 'Check an address' })}</Link></li>
               <li><Link to={`${prefix}/stats`} className="hover:text-sr-danger transition-colors">{t('footer.statistics')}</Link></li>
               <li><Link to={`${prefix}/blacklist`} className="hover:text-sr-danger transition-colors">{t('footer.blacklist_explainer')}</Link></li>
             </ul>
@@ -90,8 +91,8 @@ export function Footer() {
           <div>
             <h4 className="text-[10px] text-sr-dim uppercase tracking-wider font-bold mb-3">{t('footer.connect')}</h4>
             <ul className="space-y-2 text-[12px]">
-              <li><a href="https://x.com/XBToshi" target="_blank" rel="noreferrer" className="hover:text-sr-danger transition-colors">@XBToshi</a></li>
-              <li><a href="https://x.com/kyc_rip" target="_blank" rel="noreferrer" className="hover:text-sr-danger transition-colors">@kyc_rip</a></li>
+              <li><a href="https://x.com/intent/follow?screen_name=XBToshi" target="_blank" rel="noreferrer" className="hover:text-sr-danger transition-colors">@XBToshi</a></li>
+              <li><a href="https://x.com/intent/follow?screen_name=kyc_rip" target="_blank" rel="noreferrer" className="hover:text-sr-danger transition-colors">@kyc_rip</a></li>
               <li><a href="https://kyc.rip/ghost-mail" target="_blank" rel="noreferrer" className="hover:text-sr-danger transition-colors">Ghost Mail</a></li>
             </ul>
           </div>

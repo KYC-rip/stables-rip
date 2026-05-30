@@ -25,6 +25,7 @@ export function Header() {
 
   const NAV = [
     { path: `${prefix}/`, label: t('header.nav_tracker') },
+    { path: `${prefix}/check`, label: t('header.nav_check', { defaultValue: 'Check' }) },
     { path: `${prefix}/stats`, label: t('header.nav_stats') },
     { path: `${prefix}/blacklist`, label: t('header.nav_blacklist') },
     { path: `${prefix}/faq`, label: t('header.nav_faq') },
